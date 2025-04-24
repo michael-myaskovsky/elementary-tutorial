@@ -2,7 +2,8 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This table has basic information about a customer, as well as some
+      derived facts based on a customer's orders
     config:
       tags: ["PII"]
 
@@ -34,8 +35,16 @@ models:
       - name: signup_date
         description: Date (UTC) of a customer's signup to the online shop.
 
+    data_tests:
+      - dbt_utils.fewer_rows_than:
+          compare_model: ref('other_table_name')
+          group_by_columns: # Optional, Columns to group by before executing the test
+            - group_id
+          config:
+            severity: error
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This table has basic information about orders, as well as some derived
+      facts based on payments
     config:
       tags: ["finance"]
 
