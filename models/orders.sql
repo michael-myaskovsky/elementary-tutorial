@@ -1,56 +1,32 @@
-{% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
-
-with orders as (
-
-    select * from {{ ref('stg_orders') }}
-
-),
-
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
-),
-
-order_payments as (
-
-    select
+-- Optimized orders model
+WITH orders AS (
+    SELECT
         order_id,
-
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
-
-        sum(amount) as total_amount
-
-    from payments
-
-    group by order_id
-
+        customer_id,
+        order_date,
+        status
+    FROM {{ ref('stg_orders') }}
 ),
 
-final as (
-
-    select
-        orders.order_id,
-        orders.customer_id,
-        orders.order_date,
-        orders.status,
-
-        {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
-        {% endfor -%}
-
-        order_payments.total_amount as amount
-
-    from orders
-
-
-    left join order_payments
-        on orders.order_id = order_payments.order_id
-
+order_payments AS (
+    SELECT
+        order_id,
+        SUM(CASE WHEN status = 'success' THEN amount END) as amount,
+        COUNT(CASE WHEN status = 'success' THEN 1 END) as successful_payments
+    FROM {{ ref('stg_payments') }}
+    GROUP BY order_id
 )
 
-select * from final
+SELECT
+    orders.order_id,
+    orders.customer_id,
+    orders.order_date,
+    orders.status,
+    COALESCE(order_payments.amount, 0) as amount,
+    order_payments.successful_payments,
+    CASE
+        WHEN orders.status = 'completed' AND order_payments.successful_payments > 0 THEN true
+        ELSE false
+    END as is_completed
+FROM orders
+LEFT JOIN order_payments USING (order_id)
