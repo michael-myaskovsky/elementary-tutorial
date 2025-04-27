@@ -1,14 +1,18 @@
 {{
   config(
-    materialized = 'view',
+    materialized = 'table',
     )
 }}
 
-with orders as (
-    select *
-    from {{ ref('orders') }}
-)
-
-select *
-from orders
-where status = 'return_pending' or status = 'returned'
+select
+    order_id,
+    customer_id,
+    order_date,
+    status,
+    amount,
+    credit_card_amount,
+    coupon_amount,
+    bank_transfer_amount,
+    gift_card_amount
+from {{ ref('orders') }}
+where status in ('return_pending', 'returned')
