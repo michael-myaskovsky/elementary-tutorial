@@ -1,56 +1,34 @@
-{% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
-
-with orders as (
-
-    select * from {{ ref('stg_orders') }}
-
+WITH
+stg_orders AS (
+    SELECT * FROM {{ ref('stg_orders') }}
 ),
-
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
+stg_payments AS (
+    SELECT * FROM {{ ref('stg_payments') }}
 ),
-
-order_payments as (
-
-    select
+order_payments AS (
+    SELECT
         order_id,
-
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
-
-        sum(amount) as total_amount
-
-    from payments
-
-    group by order_id
-
+        SUM(amount) AS total_amount,
+        -- Optimized payment method summation using conditional aggregation
+        SUM(CASE WHEN payment_method = 'credit_card' THEN amount ELSE 0 END) AS credit_card_amount,
+        SUM(CASE WHEN payment_method = 'coupon' THEN amount ELSE 0 END) AS coupon_amount,
+        SUM(CASE WHEN payment_method = 'bank_transfer' THEN amount ELSE 0 END) AS bank_transfer_amount,
+        SUM(CASE WHEN payment_method = 'gift_card' THEN amount ELSE 0 END) AS gift_card_amount
+    FROM stg_payments
+    GROUP BY order_id
 ),
-
-final as (
-
-    select
-        orders.order_id,
-        orders.customer_id,
-        orders.order_date,
-        orders.status,
-
-        {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
-        {% endfor -%}
-
-        order_payments.total_amount as amount
-
-    from orders
-
-
-    left join order_payments
-        on orders.order_id = order_payments.order_id
-
+final AS (
+    SELECT
+        o.order_id,
+        o.customer_id,
+        o.order_date,
+        o.status,
+        p.total_amount,
+        p.credit_card_amount,
+        p.coupon_amount,
+        p.bank_transfer_amount,
+        p.gift_card_amount
+    FROM stg_orders o
+    LEFT JOIN order_payments p ON o.order_id = p.order_id
 )
-
-select * from final
+SELECT * FROM final
