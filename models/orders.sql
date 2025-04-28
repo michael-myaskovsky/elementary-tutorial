@@ -1,56 +1,46 @@
-{% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
+{{
+  config(
+    materialized='table',
+    indexes=[
+      {'columns': ['order_id']}
+    ],
+    partition_by={
+      'field': 'order_date',
+      'data_type': 'date'
+    }
+  )
+}}
 
-with orders as (
+-- Consider adding appropriate indexes on the staging tables as well
+-- e.g., CREATE INDEX idx_stg_orders_order_id ON {{ source('staging', 'stg_orders') }}(order_id);
+-- e.g., CREATE INDEX idx_stg_payments_order_id ON {{ source('staging', 'stg_payments') }}(order_id);
 
-    select * from {{ ref('stg_orders') }}
-
+WITH orders AS (
+    SELECT * FROM {{ ref('stg_orders' )}}
 ),
 
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
-),
-
-order_payments as (
-
-    select
+order_payments AS (
+    SELECT
         order_id,
-
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
-
-        sum(amount) as total_amount
-
-    from payments
-
-    group by order_id
-
-),
-
-final as (
-
-    select
-        orders.order_id,
-        orders.customer_id,
-        orders.order_date,
-        orders.status,
-
-        {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
-        {% endfor -%}
-
-        order_payments.total_amount as amount
-
-    from orders
-
-
-    left join order_payments
-        on orders.order_id = order_payments.order_id
-
+        SUM(CASE WHEN payment_method = 'credit_card' THEN amount ELSE 0 END) AS credit_card_amount,
+        SUM(CASE WHEN payment_method = 'coupon' THEN amount ELSE 0 END) AS coupon_amount,
+        SUM(CASE WHEN payment_method = 'bank_transfer' THEN amount ELSE 0 END) AS bank_transfer_amount,
+        SUM(CASE WHEN payment_method = 'gift_card' THEN amount ELSE 0 END) AS gift_card_amount,
+        SUM(amount) AS total_amount
+    FROM {{ ref('stg_payments') }}
+    GROUP BY order_id
 )
 
-select * from final
+SELECT
+    orders.order_id,
+    orders.customer_id,
+    orders.order_date,
+    orders.status,
+    order_payments.credit_card_amount,
+    order_payments.coupon_amount,
+    order_payments.bank_transfer_amount,
+    order_payments.gift_card_amount,
+    order_payments.total_amount AS amount
+FROM orders
+LEFT JOIN order_payments
+    ON orders.order_id = order_payments.order_id
