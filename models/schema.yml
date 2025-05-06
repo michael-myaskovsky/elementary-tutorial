@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This model represents the customers of the business, including their
+      basic information, order history, and payment details. It serves the purpose
+      of providing a comprehensive view of customer data to support various business
+      use cases, such as customer segmentation, lifetime value analysis, and customer
+      acquisition strategies. The model performs key transformations, such as calculating
+      the first and most recent order dates, the total number of orders, and the customer's
+      lifetime value based on their order and payment history.
     config:
       tags: ["PII"]
 
@@ -35,7 +41,12 @@ models:
         description: Date (UTC) of a customer's signup to the online shop.
 
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This model provides a comprehensive view of orders, including detailed
+      payment information. It combines data from the `stg_orders` and `stg_payments`
+      tables to summarize the total amount, credit card amount, coupon amount, bank
+      transfer amount, and gift card amount for each order. This model is useful for
+      finance teams to analyze order and payment trends, track payment methods, and
+      better understand the financial performance of the business.
     config:
       tags: ["finance"]
 
@@ -68,7 +79,11 @@ models:
         description: Amount of the order (AUD) paid for by gift card
 
   - name: returned_orders
-    description: This table contains all of the returned orders
+    description: This model contains all orders that have been returned or are pending
+      return. It is used to analyze the financial impact of returned orders, such
+      as refunds and associated costs. The model filters the orders table to include
+      only those with a `status` of 'return_pending' or 'returned', providing a consolidated
+      view of the returned orders for further analysis.
     config:
       tags: ["finance"]
 
