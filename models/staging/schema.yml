@@ -27,3 +27,8 @@ models:
     columns:
       - name: signup_id
       - name: customer_email
+    description: This staging model represents the raw signup data for the organization's
+      customers. It is used as the primary source for downstream data models that
+      analyze customer signup activity. The model renames and casts the columns from
+      the source `signups_training` table to a consistent schema, including the `signup_id`,
+      `customer_id`, `customer_email`, `hashed_password`, and `signup_date` fields.
