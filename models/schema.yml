@@ -2,7 +2,14 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This model represents a table of customer information, including
+      basic details like first and last name, as well as derived insights such as
+      the customer's first and most recent order dates, total number of orders, and
+      lifetime value. It serves as a central source of truth for customer data, enabling
+      data analysts and consumers to easily access and analyze customer behavior and
+      trends. The model consolidates data from multiple source tables, including customer,
+      order, payment, and signup information, to provide a comprehensive view of each
+      customer's history and engagement with the business.
     config:
       tags: ["PII"]
 
@@ -35,7 +42,14 @@ models:
         description: Date (UTC) of a customer's signup to the online shop.
 
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This model represents the orders table, which contains basic information
+      about orders as well as derived facts based on payments. It provides a comprehensive
+      view of order details, including customer, order status, and payment methods
+      used. The model aggregates payment information by order, calculating the total
+      amount as well as the amounts associated with different payment types (credit
+      card, coupon, bank transfer, gift card). This data can be used by data analysts
+      and other stakeholders to analyze order and payment patterns, identify trends,
+      and support financial reporting and decision-making.
     config:
       tags: ["finance"]
 
@@ -68,7 +82,11 @@ models:
         description: Amount of the order (AUD) paid for by gift card
 
   - name: returned_orders
-    description: This table contains all of the returned orders
+    description: This model represents a table of all returned orders. It is used
+      to track and analyze the status of orders that have been returned by customers.
+      The model filters the orders table to include only those with a status of 'return_pending'
+      or 'returned', providing a consolidated view of the returned order data for
+      the organization.
     config:
       tags: ["finance"]
 
