@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This model represents a comprehensive view of customer information,
+      including their basic details, order history, payment data, and signup information.
+      It serves as a central source for understanding customer lifecycle and behavior,
+      enabling data analysts to derive insights that support marketing, sales, and
+      customer success initiatives. Key transformations include calculating the number
+      of orders, total lifetime value, and first and most recent order dates for each
+      customer.
     config:
       tags: ["PII"]
 
@@ -35,7 +41,13 @@ models:
         description: Date (UTC) of a customer's signup to the online shop.
 
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This model represents the orders table, which contains basic information
+      about orders, as well as derived facts about the payments associated with each
+      order. The model aggregates payment data, such as the total amount paid by credit
+      card, coupon, bank transfer, and gift card, to provide a comprehensive view
+      of the order and payment details. This information can be used by data analysts
+      and other data consumers to understand the financial aspects of the company's
+      orders and support various business analysis and reporting requirements.
     config:
       tags: ["finance"]
 
@@ -68,7 +80,11 @@ models:
         description: Amount of the order (AUD) paid for by gift card
 
   - name: returned_orders
-    description: This table contains all of the returned orders
+    description: This model represents all orders that have been returned or are pending
+      return. It provides a consolidated view of the order return status, which is
+      useful for analyzing the company's returns and refunds processes. The model
+      filters the orders table to only include rows where the order status is 'return_pending'
+      or 'returned', giving data consumers a clear picture of the returned orders.
     config:
       tags: ["finance"]
 
