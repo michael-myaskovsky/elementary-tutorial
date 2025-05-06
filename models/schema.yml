@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This model represents a comprehensive view of customer information,
+      including their basic details, order history, and payment data. It serves as
+      a central source of truth for understanding customer lifetime value and behavior.
+      The model performs key transformations such as calculating the first and most
+      recent order dates, the total number of orders, and the total amount paid by
+      each customer, providing valuable insights for data analysts and business stakeholders.
     config:
       tags: ["PII"]
 
@@ -35,7 +40,12 @@ models:
         description: Date (UTC) of a customer's signup to the online shop.
 
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This model represents the orders table, which contains basic information
+      about customer orders, as well as derived metrics based on the associated payments.
+      It serves the finance domain by providing a comprehensive view of order details
+      and payment breakdowns, such as credit card, coupon, bank transfer, and gift
+      card amounts. The key transformations include aggregating payment information
+      by order and calculating the total order amount.
     config:
       tags: ["finance"]
 
@@ -68,7 +78,11 @@ models:
         description: Amount of the order (AUD) paid for by gift card
 
   - name: returned_orders
-    description: This table contains all of the returned orders
+    description: This model contains all orders that have been returned or are pending
+      return. It serves the finance team by providing a comprehensive view of returned
+      orders, which can be used for analysis and reporting on refunds, returns, and
+      other financial metrics related to order fulfillment. The model filters the
+      orders table to include only those with a status of 'return_pending' or 'returned'.
     config:
       tags: ["finance"]
 
