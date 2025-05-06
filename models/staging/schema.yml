@@ -27,3 +27,11 @@ models:
     columns:
       - name: signup_id
       - name: customer_email
+    description: This model, `stg_signups`, represents a staging table that ingests
+      and renames the raw data from the `signups_training` table in the `USAGE_DB.PUBLIC`
+      schema. It extracts the relevant fields, such as `signup_id`, `customer_id`,
+      `customer_email`, `hashed_password`, and `signup_date`, and makes them accessible
+      to downstream data consumers. This model serves as a standardized and consistent
+      source of signup data, which can be used for various analytical and business
+      purposes, such as customer onboarding, user behavior analysis, and data quality
+      monitoring.
