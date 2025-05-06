@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This model provides a comprehensive view of customer information,
+      including their first and most recent orders, total number of orders, and lifetime
+      value. It combines data from multiple source tables (customers, orders, payments,
+      and signups) to create a centralized customer profile. This model is essential
+      for understanding customer behavior and identifying high-value customers, which
+      can inform marketing strategies and business decisions.
     config:
       tags: ["PII"]
 
@@ -34,8 +39,15 @@ models:
       - name: signup_date
         description: Date (UTC) of a customer's signup to the online shop.
 
+    meta: {}
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This model represents the orders table, providing a comprehensive
+      view of all orders placed, including payment details. It serves the finance
+      team by consolidating order and payment data to enable analysis of order performance,
+      payment methods, and overall revenue. The model performs key transformations,
+      such as calculating the total amount, credit card amount, coupon amount, bank
+      transfer amount, and gift card amount for each order, allowing for deeper analysis
+      of payment trends and customer behavior.
     config:
       tags: ["finance"]
 
@@ -67,8 +79,13 @@ models:
       - name: gift_card_amount
         description: Amount of the order (AUD) paid for by gift card
 
+    meta: {}
   - name: returned_orders
-    description: This table contains all of the returned orders
+    description: This model represents all orders that have been returned or are pending
+      return. It serves the finance team by providing a comprehensive view of the
+      company's returned orders, which is important for understanding revenue, refunds,
+      and inventory management. The model filters the orders table to include only
+      those with a status of 'return_pending' or 'returned'.
     config:
       tags: ["finance"]
 
@@ -99,3 +116,4 @@ models:
 
       - name: gift_card_amount
         description: Amount of the order (AUD) paid for by gift card
+    meta: {}
