@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This model represents the customer data, including basic customer
+      information, their order history, and payment details. It serves as a central
+      source of customer-related data for data analysts and other data consumers to
+      understand customer behavior and performance. The model aggregates and joins
+      data from multiple source tables, such as customer information, orders, payments,
+      and signup details, to provide a comprehensive view of each customer's lifecycle
+      and value to the business.
     config:
       tags: ["PII"]
 
@@ -34,8 +40,14 @@ models:
       - name: signup_date
         description: Date (UTC) of a customer's signup to the online shop.
 
+    meta: {}
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This model represents the orders table, which contains basic information
+      about orders, as well as derived metrics based on payment data. It serves the
+      finance domain and provides a central source of truth for order-related data.
+      The key transformations performed include calculating the amount paid by different
+      payment methods (credit card, coupon, bank transfer, gift card) and the total
+      amount for each order.
     config:
       tags: ["finance"]
 
@@ -67,8 +79,13 @@ models:
       - name: gift_card_amount
         description: Amount of the order (AUD) paid for by gift card
 
+    meta: {}
   - name: returned_orders
-    description: This table contains all of the returned orders
+    description: This model contains all returned orders from the orders table. It
+      filters the orders table to include only orders with a status of 'return_pending'
+      or 'returned', providing a centralized view of all returned orders. This model
+      can be used by finance teams to analyze returned orders and understand the impact
+      on the business.
     config:
       tags: ["finance"]
 
@@ -99,3 +116,4 @@ models:
 
       - name: gift_card_amount
         description: Amount of the order (AUD) paid for by gift card
+    meta: {}
