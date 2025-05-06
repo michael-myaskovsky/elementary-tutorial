@@ -2,7 +2,6 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
     config:
       tags: ["PII"]
 
@@ -34,8 +33,15 @@ models:
       - name: signup_date
         description: Date (UTC) of a customer's signup to the online shop.
 
+    description: This model represents the customers of the business, including their
+      basic information as well as derived facts based on their order history and
+      payment activity. It serves to provide a centralized and comprehensive view
+      of customer data, enabling data analysts and consumers to understand customer
+      behavior and make informed decisions. The model performs key transformations,
+      such as calculating the customer's first order date, most recent order date,
+      number of orders, and lifetime value, making these insights readily available
+      for analysis.
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
     config:
       tags: ["finance"]
 
@@ -67,6 +73,13 @@ models:
       - name: gift_card_amount
         description: Amount of the order (AUD) paid for by gift card
 
+    description: This model represents a table of order information, including details
+      about the payments associated with each order. It serves the purpose of providing
+      a consolidated view of orders and their corresponding payment details, which
+      can be useful for finance and revenue analysis. Key transformations performed
+      in this model include calculating the total amount of each payment type (credit
+      card, coupon, bank transfer, gift card) for each order, as well as the total
+      order amount.
   - name: returned_orders
     description: This table contains all of the returned orders
     config:

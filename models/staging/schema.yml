@@ -27,3 +27,9 @@ models:
     columns:
       - name: signup_id
       - name: customer_email
+    description: This model represents a staging table for the signup data from the
+      `signups_training` table in the `USAGE_DB.PUBLIC` schema. It renames and selects
+      key fields such as `signup_id`, `customer_id`, `customer_email`, `hashed_password`,
+      and `signup_date`. This model serves as a data preparation step, transforming
+      the raw signup data into a more structured and usable format for downstream
+      analysis and consumption by data analysts and other data consumers.
