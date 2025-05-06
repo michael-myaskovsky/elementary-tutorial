@@ -7,6 +7,14 @@ models:
     columns:
       - name: customer_id
 
+    meta: {}
+    description: The `stg_customers` model represents a staging table that contains
+      a subset of the customer data from the `USAGE_DB.PUBLIC.customers_training`
+      table. This model extracts the `customer_id`, `first_name`, and `last_name`
+      columns, serving as a data source for downstream models that require access
+      to customer personal identifiable information (PII) data. The purpose of this
+      model is to provide a centralized and controlled access point for customer data,
+      ensuring data quality and security considerations are addressed.
   - name: stg_orders
     config:
       tags: ["staging", "finance"]
@@ -14,6 +22,12 @@ models:
       - name: order_id
       - name: status
 
+    meta: {}
+    description: This model represents a staging table for the orders data, which
+      is part of the finance domain. It retrieves data from the `USAGE_DB.PUBLIC.orders_training`
+      table, renames the relevant columns, and provides a clean and consistent dataset
+      for downstream models or reporting. The main transformations performed are extracting
+      the order ID, customer ID, order date, and order status from the source data.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
@@ -21,9 +35,23 @@ models:
       - name: payment_id
       - name: payment_method
 
+    meta: {}
+    description: This model represents a staging table for the payments data, which
+      is part of the finance domain. It renames and reformats the `payments_training`
+      table from the `USAGE_DB.PUBLIC` schema, converting the `amount` column from
+      cents to dollars. This model can be used by downstream data consumers to access
+      clean and standardized payments data for analysis purposes.
   - name: stg_signups
     config:
       tags: ["staging", "PII"]
     columns:
       - name: signup_id
       - name: customer_email
+    meta: {}
+    description: This model represents a staging table for user signup data. It is
+      a cleaned and transformed version of the `signups_training` table from the `USAGE_DB.PUBLIC`
+      schema. The key transformations performed include renaming columns to more descriptive
+      names (e.g., `user_id` to `customer_id`, `user_email` to `customer_email`) and
+      ensuring the data is compliant with the company's PII standards. This model
+      serves as a reliable and consistent source of signup data for downstream data
+      analysis and reporting.
