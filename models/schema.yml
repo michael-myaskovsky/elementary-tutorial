@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This model represents a comprehensive view of customer data, including
+      basic customer information, their order history, payment history, and signup
+      details. It serves as a central source of truth for customer-related analytics,
+      enabling data consumers to understand customer behavior, lifetime value, and
+      engagement. The model performs key transformations, such as calculating the
+      first and most recent order dates, the total number of orders, and the customer's
+      lifetime value based on their payment history.
     config:
       tags: ["PII"]
 
@@ -35,7 +41,13 @@ models:
         description: Date (UTC) of a customer's signup to the online shop.
 
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This model represents a table with basic information about orders,
+      as well as derived metrics on payment methods and total order amounts. It serves
+      the finance domain by providing a centralized source of order data, including
+      the breakdown of payments by type (credit card, coupon, bank transfer, gift
+      card) and the total order amount. The model consolidates data from the `stg_orders`
+      and `stg_payments` tables to calculate these derived metrics, making it a useful
+      resource for financial reporting and analysis.
     config:
       tags: ["finance"]
 
@@ -68,7 +80,11 @@ models:
         description: Amount of the order (AUD) paid for by gift card
 
   - name: returned_orders
-    description: This table contains all of the returned orders
+    description: This model contains all orders that have been returned or are pending
+      return. It serves the finance team by providing a comprehensive view of returned
+      orders, which is important for understanding revenue, inventory management,
+      and customer experience. The model simply selects all orders where the status
+      is 'return_pending' or 'returned' from the source `orders` table.
     config:
       tags: ["finance"]
 

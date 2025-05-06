@@ -2,12 +2,23 @@ version: 2
 
 models:
   - name: stg_customers
+    description: This model represents a staging table for customer data, containing
+      the customer ID, first name, and last name. It serves as a foundational data
+      asset for downstream models and analyses related to customers. The model simply
+      renames and selects the relevant columns from the source `USAGE_DB.PUBLIC.customers_training`
+      table.
     config:
       tags: ["staging", "PII"]
     columns:
       - name: customer_id
 
   - name: stg_orders
+    description: This model represents a staging table for the orders data from the
+      `USAGE_DB.PUBLIC.orders_training` table. It serves as an intermediate step in
+      the data pipeline before the data is transformed and loaded into a final reporting
+      table. The model renames the columns to more intuitive names (`id` to `order_id`,
+      `user_id` to `customer_id`) and selects only the relevant columns (`order_date`,
+      `status`) to provide a clean, structured dataset for downstream analysis.
     config:
       tags: ["staging", "finance"]
     columns:
@@ -15,6 +26,13 @@ models:
       - name: status
 
   - name: stg_payments
+    description: "This model represents a staging table for the `payments` data, which
+      is a key dataset for the finance domain. It performs the following transformations:\n
+      \n- Renames the source columns to more descriptive names, such as `payment_id`
+      and `payment_method`.\n- Converts the `amount` column from cents to dollars,
+      making the values more interpretable for data consumers.\n- This model serves
+      as a reliable and consistent source of payment data for further analysis and
+      reporting by data analysts and consumers."
     config:
       tags: ["staging", "finance"]
     columns:
@@ -22,6 +40,11 @@ models:
       - name: payment_method
 
   - name: stg_signups
+    description: This staging model represents the raw signup data from the `USAGE_DB.PUBLIC.signups_training`
+      table. It renames and selects the relevant columns, including the signup ID,
+      customer ID, customer email, hashed password, and signup date. This model serves
+      as the source for downstream data models that may utilize the signup information
+      for analysis or reporting purposes.
     config:
       tags: ["staging", "PII"]
     columns:
