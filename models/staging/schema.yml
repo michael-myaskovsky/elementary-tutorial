@@ -2,12 +2,24 @@ version: 2
 
 models:
   - name: stg_customers
+    description: This staging model represents a materialized copy of the `customers_training`
+      table from the `USAGE_DB.PUBLIC` schema. It extracts the `id`, `first_name`,
+      and `last_name` columns, which contain personally identifiable information (PII)
+      about customers. This model serves as an intermediate data asset, providing
+      a standardized and accessible view of the customer data for downstream analysis
+      and reporting.
     config:
       tags: ["staging", "PII"]
     columns:
       - name: customer_id
 
   - name: stg_orders
+    description: This model represents a staging table for the orders data, providing
+      a clean and consistent data structure for downstream analysis and reporting.
+      It extracts key attributes from the source `USAGE_DB.PUBLIC.orders_training`
+      table, including the order ID, customer ID, order date, and order status. This
+      model serves the finance domain by enabling analysts to easily access and work
+      with the order data, supporting financial analysis and reporting.
     config:
       tags: ["staging", "finance"]
     columns:
@@ -15,6 +27,11 @@ models:
       - name: status
 
   - name: stg_payments
+    description: This model provides a staging layer for the `payments_training` table
+      from the `USAGE_DB.PUBLIC` schema. It renames the columns to more descriptive
+      names, and converts the `amount` column from cents to dollars. This model can
+      be used by downstream data consumers to access payment data for financial analysis
+      and reporting.
     config:
       tags: ["staging", "finance"]
     columns:
@@ -22,6 +39,13 @@ models:
       - name: payment_method
 
   - name: stg_signups
+    description: This model, `stg_signups`, represents a staging table that captures
+      the signup data for customers in the system. It pulls data from the `USAGE_DB.PUBLIC.signups_training`
+      table, and renames and selects the relevant columns, including the `signup_id`,
+      `customer_id`, `customer_email`, `hashed_password`, and `signup_date`. This
+      model serves as a centralized and curated source of signup data, which can be
+      used by downstream data analysts and consumers for various analytical and reporting
+      purposes.
     config:
       tags: ["staging", "PII"]
     columns:
