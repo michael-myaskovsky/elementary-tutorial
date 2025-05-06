@@ -7,6 +7,12 @@ models:
     columns:
       - name: customer_id
 
+    description: This model represents a staging layer table for customer data, containing
+      basic information such as customer ID, first name, and last name. It serves
+      as an intermediate data source for downstream data analysis and reporting, providing
+      a clean and consistent view of customer data from the underlying `USAGE_DB.PUBLIC.customers_training`
+      table. The model performs a simple renaming and selection of relevant columns,
+      ensuring that the customer data is readily accessible to data consumers.
   - name: stg_orders
     config:
       tags: ["staging", "finance"]
@@ -14,6 +20,12 @@ models:
       - name: order_id
       - name: status
 
+    description: This model, `stg_orders`, represents a staging table for the orders
+      data in the USAGE_DB.PUBLIC.orders_training source table. It serves the finance
+      domain by providing a clean, standardized dataset for further analysis and downstream
+      processing. The model renames and selects key columns from the source table,
+      including order_id, customer_id, order_date, and status, to create a more organized
+      and accessible data structure for data analysts and consumers.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
@@ -27,3 +39,10 @@ models:
     columns:
       - name: signup_id
       - name: customer_email
+    description: This model represents a staging table for user signup data. It pulls
+      data from the `USAGE_DB.PUBLIC.signups_training` table, and renames and transforms
+      the columns to create a more user-friendly data structure. The key transformations
+      include extracting the `signup_id`, `customer_id`, `customer_email`, `hashed_password`,
+      and `signup_date` from the source data. This model serves as a first step in
+      the data pipeline, providing a clean and standardized dataset for further downstream
+      analysis and reporting on user signups.
