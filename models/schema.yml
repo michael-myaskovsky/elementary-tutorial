@@ -2,7 +2,14 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
+    description: This model represents a comprehensive view of customer information,
+      including their basic details, order history, payment information, and signup
+      data. It serves as a central source of truth for customer-related data, enabling
+      data analysts and consumers to gain valuable insights into customer behavior,
+      lifetime value, and engagement. The model consolidates data from multiple source
+      tables, calculates derived metrics such as the number of orders and total amount
+      paid by each customer, and provides a unified, easy-to-use dataset for further
+      analysis.
     config:
       tags: ["PII"]
 
@@ -35,7 +42,14 @@ models:
         description: Date (UTC) of a customer's signup to the online shop.
 
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This model represents the order history for the business, including
+      details about the orders and the associated payments. It provides a comprehensive
+      view of the order lifecycle, from order placement to payment processing. The
+      model consolidates data from the `stg_orders` and `stg_payments` tables, and
+      calculates various payment metrics such as credit card, coupon, bank transfer,
+      and gift card amounts, as well as the total order amount. This data can be used
+      by data analysts and consumers to understand the company's sales performance,
+      payment trends, and customer behavior.
     config:
       tags: ["finance"]
 
