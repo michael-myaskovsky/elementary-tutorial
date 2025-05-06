@@ -2,12 +2,22 @@ version: 2
 
 models:
   - name: stg_customers
+    description: This model represents a staging table for customer data, containing
+      the customer ID, first name, and last name. It serves as the foundation for
+      further downstream data processing and analysis related to customer information.
+      The model extracts and renames key fields from the `USAGE_DB.PUBLIC.customers_training`
+      table, providing a clean and accessible data source for data analysts and consumers.
     config:
       tags: ["staging", "PII"]
     columns:
       - name: customer_id
 
   - name: stg_orders
+    description: A staging layer model that prepares the `orders_training` table from
+      the `USAGE_DB.PUBLIC` schema for further downstream processing. It extracts
+      the relevant order attributes, such as `order_id`, `customer_id`, `order_date`,
+      and `status`, to create a clean and structured dataset that can be used for
+      finance-related analyses.
     config:
       tags: ["staging", "finance"]
     columns:
@@ -15,6 +25,11 @@ models:
       - name: status
 
   - name: stg_payments
+    description: The `stg_payments` model represents a staging table for the `payments_training`
+      table from the `USAGE_DB.PUBLIC` schema. It renames the columns to more descriptive
+      names and converts the `amount` column from cents to dollars. This model serves
+      as an intermediary step in the data pipeline, preparing the payments data for
+      further downstream processing and analysis by data consumers.
     config:
       tags: ["staging", "finance"]
     columns:
@@ -22,6 +37,11 @@ models:
       - name: payment_method
 
   - name: stg_signups
+    description: This model represents a staging table for signup data, containing
+      customer IDs, emails, hashed passwords, and signup dates. It serves as a bridge
+      between the raw signups data source and downstream analytical models, ensuring
+      data quality and consistency. The key transformations performed include renaming
+      columns and potentially validating the data against a signups validation table.
     config:
       tags: ["staging", "PII"]
     columns:
