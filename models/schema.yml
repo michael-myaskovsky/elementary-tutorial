@@ -2,7 +2,6 @@ version: 2
 
 models:
   - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
     config:
       tags: ["PII"]
 
@@ -34,8 +33,16 @@ models:
       - name: signup_date
         description: Date (UTC) of a customer's signup to the online shop.
 
+    description: This model represents the customer data for the business, including
+      basic customer information, order history, payment details, and signup data.
+      It serves as a central source of customer-related data, enabling data analysts
+      and consumers to understand customer behavior, lifetime value, and other key
+      metrics. The model performs several transformations, such as calculating the
+      first and most recent order dates, the total number of orders per customer,
+      and the total lifetime value of each customer based on their payment history.
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This table has basic information about orders, as well as some derived
+      facts based on payments
     config:
       tags: ["finance"]
 
