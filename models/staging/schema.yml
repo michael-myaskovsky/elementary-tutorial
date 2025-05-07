@@ -2,12 +2,27 @@ version: 2
 
 models:
   - name: stg_customers
+    description: This model represents a staging table for the customer data in the
+      USAGE_DB.PUBLIC.customers_training table. It extracts the customer ID, first
+      name, and last name from the source table and renames the fields to be more
+      descriptive. This model serves as a centralized and curated version of the customer
+      data, which can be used by downstream data analysts and consumers for analysis
+      and reporting purposes. The model performs a simple rename transformation to
+      ensure the field names are meaningful and consistent with other data assets
+      in the project.
     config:
       tags: ["staging", "PII"]
     columns:
       - name: customer_id
 
   - name: stg_orders
+    description: This model is a staging table that represents the orders data from
+      the `USAGE_DB.PUBLIC.orders_training` table. It serves the finance domain by
+      providing a cleansed and standardized version of the raw orders data, which
+      can be used for further analysis and reporting. The model performs key transformations,
+      such as renaming the columns to more descriptive names (e.g., `id` to `order_id`,
+      `user_id` to `customer_id`) and selecting only the relevant columns (order_id,
+      customer_id, order_date, and status).
     config:
       tags: ["staging", "finance"]
     columns:
@@ -15,6 +30,12 @@ models:
       - name: status
 
   - name: stg_payments
+    description: This model, `stg_payments`, represents a staging table for the `payments_training`
+      table from the `USAGE_DB.PUBLIC` schema. It renames the columns to more descriptive
+      names, such as `payment_id`, `order_id`, and `payment_method`, and converts
+      the `amount` column from cents to dollars. This model serves the finance team
+      by providing a clean, standardized version of the payment data that can be used
+      for further analysis and reporting.
     config:
       tags: ["staging", "finance"]
     columns:
@@ -22,6 +43,13 @@ models:
       - name: payment_method
 
   - name: stg_signups
+    description: The `stg_signups` model represents a staging table that contains
+      customer signup data. This model retrieves data from the `signups_training`
+      table in the `USAGE_DB.PUBLIC` schema, renames the columns, and provides a clean
+      and consistent representation of the signup information, including the `signup_id`,
+      `customer_id`, `customer_email`, `hashed_password`, and `signup_date`. This
+      model serves as an intermediate data asset that can be used by downstream data
+      analysts and consumers to analyze customer signups and user activity.
     config:
       tags: ["staging", "PII"]
     columns:
