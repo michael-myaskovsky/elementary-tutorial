@@ -1,19 +1,30 @@
+{{ config(
+    materialized='table',
+    indexes=[
+        {'columns': ['order_id']},
+        {'columns': ['order_date']}
+    ],
+    partition_by={
+        'field': 'order_date',
+        'data_type': 'date'
+    }
+) }}
+
 {% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
 
 with orders as (
-
     select * from {{ ref('stg_orders') }}
-
+    -- Consider adding any common filters here for predicate pushdown
+    -- For example: where order_date >= date_trunc('month', current_date) - interval '1 year'
 ),
 
 payments as (
-
     select * from {{ ref('stg_payments') }}
-
+    -- Consider adding any common filters here for predicate pushdown
+    -- For example: where amount > 0
 ),
 
 order_payments as (
-
     select
         order_id,
 
@@ -22,15 +33,11 @@ order_payments as (
         {% endfor -%}
 
         sum(amount) as total_amount
-
     from payments
-
     group by order_id
-
 ),
 
 final as (
-
     select
         orders.order_id,
         orders.customer_id,
@@ -38,19 +45,13 @@ final as (
         orders.status,
 
         {% for payment_method in payment_methods -%}
-
         order_payments.{{ payment_method }}_amount,
-
         {% endfor -%}
 
         order_payments.total_amount as amount
-
     from orders
-
-
     left join order_payments
         on orders.order_id = order_payments.order_id
-
 )
 
 select * from final
