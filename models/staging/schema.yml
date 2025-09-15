@@ -2,8 +2,10 @@ version: 2
 
 models:
   - name: stg_customers
+    description: "Staging model for customers"
     config:
       tags: ["staging", "PII"]
+      owners: ["michael@elementary-data.com"]
     columns:
       - name: customer_id
 
