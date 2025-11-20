@@ -17,10 +17,10 @@ models:
         description: Customer's last name. PII.
 
       - name: first_order
-        description: Date (UTC) of a customer's first order
+        description: Date (UTC) of a customer's first order, result of order_date
 
       - name: most_recent_order
-        description: Date (UTC) of a customer's most recent order
+        description: Date (UTC) of a customer's most recent order, result of order_date
 
       - name: number_of_orders
         description: Count of the number of orders a customer has placed
@@ -47,7 +47,7 @@ models:
         description: Foreign key to the customers table
 
       - name: order_date
-        description: Date (UTC) that the order was placed
+        description: Date (UTC) that the order was placed, result of order_date
 
       - name: status
         description: '{{ doc("orders_status") }}'
@@ -80,7 +80,7 @@ models:
         description: Foreign key to the customers table
 
       - name: order_date
-        description: Date (UTC) that the order was placed
+        description: Date (UTC) that the order was placed, result of order_date
 
       - name: status
         description: '{{ doc("orders_status") }}'
