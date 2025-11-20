@@ -1,3 +1,5 @@
+-- This model consolidates order data with payment information
+-- by payment method to provide a comprehensive view of each order
 {% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
 
 with orders as (
