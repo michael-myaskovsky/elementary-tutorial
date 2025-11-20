@@ -5,10 +5,22 @@ models:
     description: This table has basic information about a customer, as well as some derived facts based on a customer's orders aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     config:
       tags: ["PII"]
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "customer_lifetime_value >= 0 OR customer_lifetime_value IS NULL"
+          config:
+            severity: error
+      - dbt_utils.expression_is_true:
+          expression: "first_order <= most_recent_order OR first_order IS NULL OR most_recent_order IS NULL"
+          config:
+            severity: error
 
     columns:
       - name: customer_id
         description: This is a unique identifier for a customer
+        tests:
+          - unique
+          - not_null
 
       - name: first_name
         description: Customer's first name. PII.
