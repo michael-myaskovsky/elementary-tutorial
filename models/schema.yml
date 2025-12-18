@@ -34,6 +34,9 @@ models:
       - name: signup_date
         description: Date (UTC) of a customer's signup to the online shop.
 
+    meta:
+      owner:
+        - michael
   - name: orders
     description: This table has basic information about orders, as well as some derived facts based on payments
     config:
@@ -67,6 +70,9 @@ models:
       - name: gift_card_amount
         description: Amount of the order (AUD) paid for by gift card
 
+    meta:
+      owner:
+        - michael
   - name: returned_orders
     description: This table contains all of the returned orders
     config:
