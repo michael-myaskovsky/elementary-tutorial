@@ -27,3 +27,10 @@ models:
     columns:
       - name: signup_id
       - name: customer_email
+    description: This model represents a staging table for user signup data, containing
+      key information such as the signup ID, customer ID, customer email, hashed password,
+      and signup date. It serves as a landing zone for the raw signups data from the
+      `USAGE_DB.PUBLIC.signups_training` table, preparing the data for further downstream
+      processing and analysis. The model performs a simple renaming of the source
+      column names to more intuitive and business-relevant names, making the data
+      more accessible and understandable for data consumers.
