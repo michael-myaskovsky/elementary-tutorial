@@ -4,7 +4,7 @@ models:
   - name: customers
     description: This table has basic information about a customer, as well as some derived facts based on a customer's orders aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     config:
-      tags: ["PII"]
+      tags: ["PII", test]
 
     columns:
       - name: customer_id
