@@ -9,14 +9,18 @@ models:
 
   - name: stg_orders
     config:
-      tags: ["staging", "finance"]
+      tags:
+        - "staging"
+        - test
     columns:
       - name: order_id
       - name: status
 
   - name: stg_payments
     config:
-      tags: ["staging", "finance"]
+      tags:
+        - "staging"
+        - test
     columns:
       - name: payment_id
       - name: payment_method

@@ -37,7 +37,8 @@ models:
   - name: orders
     description: This table has basic information about orders, as well as some derived facts based on payments
     config:
-      tags: ["finance"]
+      tags: &id001
+        - test
 
     columns:
       - name: order_id
@@ -70,7 +71,7 @@ models:
   - name: returned_orders
     description: This table contains all of the returned orders
     config:
-      tags: ["finance"]
+      tags: *id001
 
     columns:
       - name: order_id
