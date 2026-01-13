@@ -1,56 +1,39 @@
-{% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
+{{ config(materialized='table') }}
 
-with orders as (
-
-    select * from {{ ref('stg_orders') }}
-
+WITH orders AS (
+    SELECT * FROM {{ ref('stg_orders') }}
 ),
 
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
+payments AS (
+    SELECT * FROM {{ ref('stg_payments') }}
 ),
 
-order_payments as (
-
-    select
+order_payments AS (
+    SELECT
         order_id,
-
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
-
-        sum(amount) as total_amount
-
-    from payments
-
-    group by order_id
-
+        SUM(CASE WHEN status = 'success' THEN amount END) AS amount
+    FROM payments
+    GROUP BY order_id
 ),
 
-final as (
-
-    select
+final AS (
+    SELECT
         orders.order_id,
         orders.customer_id,
         orders.order_date,
         orders.status,
-
-        {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
-        {% endfor -%}
-
-        order_payments.total_amount as amount
-
-    from orders
-
-
-    left join order_payments
-        on orders.order_id = order_payments.order_id
-
+        COALESCE(order_payments.amount, 0) AS amount
+    FROM orders
+    LEFT JOIN order_payments
+        ON orders.order_id = order_payments.order_id
 )
 
-select * from final
+SELECT * FROM final
+
+{{ config(
+    post_hook=[
+        "CREATE INDEX IF NOT EXISTS idx_orders_order_id ON {{ this }}(order_id)",
+        "CREATE INDEX IF NOT EXISTS idx_orders_customer_id ON {{ this }}(customer_id)",
+        "CREATE INDEX IF NOT EXISTS idx_orders_order_date ON {{ this }}(order_date)"
+    ]
+) }}
