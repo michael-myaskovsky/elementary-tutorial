@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: orders
+    description: 'A model representing customer orders'
+    columns:
+      - name: order_id
+        description: 'Unique identifier for each order'
+    meta:
+      owner: '@michael'
