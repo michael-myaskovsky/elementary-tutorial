@@ -1,85 +1,34 @@
-with customers as (
-
-    select * from {{ ref('stg_customers') }}
-
+WITH customers AS (
+    SELECT * FROM {{ ref('stg_customers') }}
 ),
 
-orders as (
-
-    select * from {{ ref('stg_orders') }}
-
+orders AS (
+    SELECT * FROM {{ ref('stg_orders') }}
 ),
 
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
+payments AS (
+    SELECT * FROM {{ ref('stg_payments') }}
 ),
 
-signups as (
-
-    select * from {{ ref('stg_signups') }}
-),
-
-customer_orders as (
-
-        select
-        customer_id,
-
-        min(order_date) as first_order,
-        max(order_date) as most_recent_order,
-        count(order_id) as number_of_orders
-    from orders
-
-    group by customer_id
-
-),
-
-customer_payments as (
-
-    select
+customer_orders_and_payments AS (
+    SELECT
         orders.customer_id,
-        sum(amount) as total_amount
-
-    from payments
-
-    left join orders on
-         payments.order_id = orders.order_id
-
-    group by orders.customer_id
-
+        COUNT(DISTINCT orders.order_id) AS number_of_orders,
+        COALESCE(SUM(payments.amount), 0) AS total_amount
+    FROM orders
+    LEFT JOIN payments ON orders.order_id = payments.order_id
+    GROUP BY orders.customer_id
 ),
 
-final as (
-
-    select
+final AS (
+    SELECT
         customers.customer_id,
         customers.first_name,
         customers.last_name,
-        customer_orders.first_order,
-        customer_orders.most_recent_order,
-        case
-            when customer_orders.number_of_orders is null then 0
-            else customer_orders.number_of_orders
-        end as number_of_orders,
-        customer_payments.total_amount as customer_lifetime_value,
-        signups.customer_email,
-        {% if elementary.get_config_var('anomalies') %}
-            signups.customer_email as customer_email_2,
-        {% endif %}
-        signups.signup_date
-
-    from customers
-
-    left join customer_orders
-        on customers.customer_id = customer_orders.customer_id
-
-    left join customer_payments
-        on  customers.customer_id = customer_payments.customer_id
-
-    left join signups
-        on customers.customer_id = signups.customer_id
-
+        COALESCE(customer_orders_and_payments.number_of_orders, 0) AS number_of_orders,
+        COALESCE(customer_orders_and_payments.total_amount, 0) AS customer_lifetime_value
+    FROM customers
+    LEFT JOIN customer_orders_and_payments ON customers.customer_id = customer_orders_and_payments.customer_id
 )
 
-select * from final
+SELECT * FROM final
