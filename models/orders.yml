@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: orders
+    description: "Orders model"
+    meta:
+      subscribers: ["michael@example.com"]
