@@ -41,31 +41,31 @@ models:
 
     columns:
       - name: order_id
-        description: This is a unique identifier for an order
+        description: A unique identifier for each order placed in the system, used to track and manage individual orders throughout the order lifecycle.
 
       - name: customer_id
-        description: Foreign key to the customers table
+        description: A unique identifier for a customer in the orders table.
 
       - name: order_date
-        description: Date (UTC) that the order was placed
+        description: A timestamp representing the date and time when an order was placed.
 
       - name: status
-        description: '{{ doc("orders_status") }}'
+        description: This indicates whether the order has been processed, shipped, delivered, or returned.
 
       - name: amount
-        description: Total amount (AUD) of the order
+        description: A numeric representation of the monetary amount associated with each payment transaction.
 
       - name: credit_card_amount
-        description: Amount of the order (AUD) paid for by credit card
+        description: A numeric representation of the monetary amount associated with each order payment.
 
       - name: coupon_amount
-        description: Amount of the order (AUD) paid for by coupon
+        description: A monetary value representing the discount or promotional credit applied to an order, derived from the payment transaction amount.
 
       - name: bank_transfer_amount
-        description: Amount of the order (AUD) paid for by bank transfer
+        description: This entity represents the monetary amount associated with bank transfer payments.
 
       - name: gift_card_amount
-        description: Amount of the order (AUD) paid for by gift card
+        description: A numeric representation of the monetary amount associated with each gift card payment transaction.
 
   - name: returned_orders
     description: This table contains all of the returned orders
@@ -74,28 +74,28 @@ models:
 
     columns:
       - name: order_id
-        description: This is a unique identifier for an order
+        description: A unique identifier for each returned order placed in the system, used to track and manage individual returned orders throughout the order lifecycle.
 
       - name: customer_id
-        description: Foreign key to the customers table
+        description: A unique identifier for a customer in the returned orders table, which corresponds to the customer ID in the orders table.
 
       - name: order_date
-        description: Date (UTC) that the order was placed
+        description: A timestamp representing the date and time when a returned order was placed.
 
       - name: status
-        description: '{{ doc("orders_status") }}'
+        description: A status indicator for returned orders, reflecting whether the order has been processed, shipped, delivered, or returned.
 
       - name: amount
-        description: Total amount (AUD) of the order
+        description: A numeric representation of the monetary amount associated with each returned payment transaction.
 
       - name: credit_card_amount
-        description: Amount of the order (AUD) paid for by credit card
+        description: A numeric representation of the monetary amount associated with each returned order payment.
 
       - name: coupon_amount
-        description: Amount of the order (AUD) paid for by coupon
+        description: A monetary value representing the discount or promotional credit applied to a returned order, derived from the payment transaction amount.
 
       - name: bank_transfer_amount
-        description: Amount of the order (AUD) paid for by bank transfer
+        description: This entity represents the monetary amount associated with bank transfer payments for returned orders.
 
       - name: gift_card_amount
-        description: Amount of the order (AUD) paid for by gift card
+        description: A numeric representation of the monetary amount associated with each gift card payment transaction for returned orders.
