@@ -41,31 +41,33 @@ models:
 
     columns:
       - name: order_id
-        description: This is a unique identifier for an order
+        description: A unique identifier for each order within the training dataset, used to track and manage individual orders. It is derived from the 'id' column in the 'orders_training'
+          table.
 
       - name: customer_id
-        description: Foreign key to the customers table
+        description: A unique identifier for the customer placing an order. It is used to link the order to the customer in other tables.
 
       - name: order_date
-        description: Date (UTC) that the order was placed
+        description: A timestamp representing the date and time when the order was placed in the stg_orders table.
 
       - name: status
-        description: '{{ doc("orders_status") }}'
+        description: A representation of the current state or condition of an order, indicating whether it has been processed, shipped, delivered, or canceled.
 
       - name: amount
-        description: Total amount (AUD) of the order
+        description: The monetary value of a transaction, which is the numerical representation of the amount paid or received during a payment event.
 
       - name: credit_card_amount
-        description: Amount of the order (AUD) paid for by credit card
+        description: The monetary value of a transaction for an order, calculated based on the payment method and amount.
 
       - name: coupon_amount
-        description: Amount of the order (AUD) paid for by coupon
+        description: The monetary value of the coupon used in an order.
 
       - name: bank_transfer_amount
-        description: Amount of the order (AUD) paid for by bank transfer
+        description: This column represents the monetary value of a transaction when the payment method is bank transfer. It is derived from the amount paid during a payment event where the
+          payment method is specified as bank transfer.
 
       - name: gift_card_amount
-        description: Amount of the order (AUD) paid for by gift card
+        description: The monetary value associated with a gift card used in the payment of an order.
 
   - name: returned_orders
     description: This table contains all of the returned orders
@@ -74,28 +76,28 @@ models:
 
     columns:
       - name: order_id
-        description: This is a unique identifier for an order
+        description: A unique identifier for orders that have been returned.
 
       - name: customer_id
-        description: Foreign key to the customers table
+        description: A unique identifier for customers who have returned orders.
 
       - name: order_date
-        description: Date (UTC) that the order was placed
+        description: A timestamp indicating when the order was returned.
 
       - name: status
-        description: '{{ doc("orders_status") }}'
+        description: A status indicator for orders that have been returned.
 
       - name: amount
-        description: Total amount (AUD) of the order
+        description: The monetary value associated with each returned order.
 
       - name: credit_card_amount
-        description: Amount of the order (AUD) paid for by credit card
+        description: The amount of money charged to a credit card for a returned order.
 
       - name: coupon_amount
-        description: Amount of the order (AUD) paid for by coupon
+        description: The monetary value of the coupon applied to the returned order.
 
       - name: bank_transfer_amount
-        description: Amount of the order (AUD) paid for by bank transfer
+        description: This column represents the amount of money that was transferred through a bank for a returned order.
 
       - name: gift_card_amount
-        description: Amount of the order (AUD) paid for by gift card
+        description: The monetary value of the gift card used in a returned order.
