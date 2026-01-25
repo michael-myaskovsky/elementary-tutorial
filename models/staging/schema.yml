@@ -9,7 +9,7 @@ models:
 
   - name: stg_orders
     config:
-      tags: ["staging", "finance"]
+      tags: ["staging", "finance", orders]
     columns:
       - name: order_id
       - name: status
