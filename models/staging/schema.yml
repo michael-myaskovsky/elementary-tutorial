@@ -12,8 +12,16 @@ models:
       tags: ["staging", "finance"]
     columns:
       - name: order_id
+        description: A unique identifier for each order placed, derived from the id
+          column.
       - name: status
 
+        description: Indicates the current state or condition of the entity, reflecting
+          its position within a process or workflow.
+      - name: customer_id
+        description: A unique identifier for customers, derived from the user_id.
+      - name: order_date
+        description: The order_date column captures the date when an order was placed.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
