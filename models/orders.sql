@@ -53,4 +53,17 @@ final as (
 
 )
 
-select * from final
+-- Optimization suggestions:
+-- 1. Ensure 'order_id' is indexed in both stg_orders and stg_payments tables
+-- 2. Consider partitioning the final table by 'order_date' if it spans a wide range of dates
+
+select
+    order_id,
+    customer_id,
+    order_date,
+    status,
+    {% for payment_method in payment_methods -%}
+    {{ payment_method }}_amount,
+    {% endfor -%}
+    amount
+from final
