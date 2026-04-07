@@ -99,3 +99,8 @@ models:
 
       - name: gift_card_amount
         description: Amount of the order (AUD) paid for by gift card
+
+  - name: empty_for_volume_test
+    description: Intentionally empty model for volume test that always fails
+    config:
+      tags: ["volume_test"]
