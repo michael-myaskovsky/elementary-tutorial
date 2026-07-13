@@ -51,7 +51,7 @@ models:
   - name: orders
     description: This table has basic information about orders, as well as some derived facts based on payments
     config:
-      tags: ["finance"]
+      tags: ["fin"]
       elementary:
         timestamp_column: "order_date"
 
@@ -90,7 +90,7 @@ models:
   - name: returned_orders
     description: This table contains all of the returned orders
     config:
-      tags: ["finance"]
+      tags: ["fin"]
 
     tests:
       - elementary.table_anomalies:
