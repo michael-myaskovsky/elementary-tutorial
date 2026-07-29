@@ -1,25 +1,63 @@
-name: Elementary Data Quality Review
+# .github/workflows/elementary-review.yml
+name: Elementary CI Review
 
 on:
   pull_request:
-    paths:
-      - "models/**/*.sql"
-      - "models/**/*.yml"
-      - "dbt_project.yml"
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write   # lets github.token post the summary comment
 
 jobs:
-  elementary-review:
+  review:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
     steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+      - name: Call Elementary review endpoint
+        id: review
+        env:
+          ELEMENTARY_API_KEY: ${{ secrets.ELEMENTARY_API_KEY }}
+          ELEMENTARY_API_URL: "https://dev.api.elementary-data.com"   # e.g. https://<dev-env-api-host>
+        run: |
+          # No pull_request_number on purpose: forces the server to resolve the
+          # PR via find_open_pr_number (the PR 6910 path we want to exercise).
+          # To test the explicit path instead, add:
+          #   "pull_request_number": ${{ github.event.pull_request.number }},
+          RESPONSE=$(curl -sf --max-time 320 \
+            -X POST \
+            -H "Authorization: Bearer ${ELEMENTARY_API_KEY}" \
+            -H "Content-Type: application/json" \
+            --data-raw "{
+              \"repository\": \"${{ github.repository }}\",
+              \"branch\": \"${{ github.head_ref }}\",
+              \"post_inline_comments\": true
+            }" \
+            "${ELEMENTARY_API_URL}/ci/review")
 
-      - uses: elementary-data/elementary-ci@v1
-        with:
-          elementary-api-key: ${{ secrets.ELEMENTARY_API_KEY }}
-          elementary-api-url: "https://dev.api.elementary-data.com"
+          echo "$RESPONSE" | jq '{posted, review_url, inline_comments: (.inline_comments | length)}'
+          echo "$RESPONSE" | jq -r '.comment' > /tmp/comment.md
+
+          if [ ! -s /tmp/comment.md ]; then
+            echo "ERROR: empty comment from Elementary API" >&2
+            exit 1
+          fi
+
+      - name: Post or update summary comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MARKER: "<!-- elementary-data-quality-code-review -->"
+        run: |
+          PR=${{ github.event.pull_request.number }}
+          # Find our previous summary comment by marker (issue comments, not review comments)
+          EXISTING_ID=$(gh api "repos/${{ github.repository }}/issues/${PR}/comments" \
+            --paginate --jq ".[] | select(.body | contains(\"${MARKER}\")) | .id" | head -1)
+
+          if [ -n "$EXISTING_ID" ]; then
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/${EXISTING_ID}" \
+              -F body=@/tmp/comment.md > /dev/null
+            echo "Updated summary comment ${EXISTING_ID}"
+          else
+            gh api "repos/${{ github.repository }}/issues/${PR}/comments" \
+              -F body=@/tmp/comment.md > /dev/null
+            echo "Created summary comment"
+          fi
