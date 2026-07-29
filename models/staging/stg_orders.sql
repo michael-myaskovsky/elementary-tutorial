@@ -15,7 +15,7 @@ renamed as (
 
     select
         id as order_id,
-        user_id as customer_id,
+        user_id as client_id,
         order_date,
         status
 
@@ -23,4 +23,4 @@ renamed as (
 
 )
 
-select * from renamed
+select * from named
