@@ -2,7 +2,12 @@
 
 with orders as (
 
-    select * from {{ ref('stg_orders') }}
+    select
+        order_id,
+        customer_id,
+        order_date,
+        status
+    from {{ ref('stg_orders') }}
 
 ),
 
@@ -14,6 +19,7 @@ payments as (
 
 order_payments as (
 
+    -- Consider pre-aggregating this data in an upstream model if possible
     select
         order_id,
 
