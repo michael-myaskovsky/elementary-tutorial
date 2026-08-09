@@ -34,6 +34,7 @@ models:
       - name: signup_date
         description: Date (UTC) of a customer's signup to the online shop.
 
+    data_tests: []
   - name: orders
     description: This table has basic information about orders, as well as some derived facts based on payments
     config:
