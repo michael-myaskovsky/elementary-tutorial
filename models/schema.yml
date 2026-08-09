@@ -34,6 +34,13 @@ models:
       - name: signup_date
         description: Date (UTC) of a customer's signup to the online shop.
 
+    data_tests:
+      - dbt_utils.expression_is_true:
+          expression: customer_email IS NULL OR customer_email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+          config:
+            where: customer_email IS NOT NULL
+      - dbt_utils.expression_is_true:
+          expression: (number_of_orders = 0 AND first_order IS NULL AND most_recent_order IS NULL) OR (number_of_orders > 0 AND first_order IS NOT NULL AND most_recent_order IS NOT NULL)
   - name: orders
     description: This table has basic information about orders, as well as some derived facts based on payments
     config:
