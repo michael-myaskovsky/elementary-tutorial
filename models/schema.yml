@@ -35,7 +35,7 @@ models:
         description: Date (UTC) of a customer's signup to the online shop.
 
   - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
+    description: This table has basic information about orders, as well as some derived facts based on payments.
     config:
       tags: ["finance"]
 
