@@ -2,6 +2,10 @@ version: 2
 
 models:
   - name: stg_customers
+    description: Staging table for customer data that standardizes and cleans raw
+      customer information. Conditionally sources from either validation or training
+      datasets based on anomalies configuration. Renames ID field to customer_id and
+      selects core customer attributes.
     config:
       tags: ["staging", "PII"]
     columns:
