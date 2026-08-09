@@ -7,23 +7,54 @@ models:
     columns:
       - name: customer_id
 
+        description: A unique identifier for customers.
+      - name: first_name
+        description: A unique identifier for a customer's first name.
+      - name: last_name
+        description: A string representation of the surname of a customer. It is used
+          to identify and address customers in a personalized manner.
   - name: stg_orders
     config:
       tags: ["staging", "finance"]
     columns:
       - name: order_id
+        description: A unique identifier for each order.
       - name: status
 
+        description: A status indicator for orders, reflecting the current state of
+          an order within the system.
+      - name: customer_id
+        description: A unique identifier for the customer placing the order.
+      - name: order_date
+        description: A timestamp representing the date and time when the order was
+          placed.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
     columns:
       - name: payment_id
+        description: A unique identifier for each payment made.
       - name: payment_method
 
+        description: A unique identifier for the method used in the payment.
+      - name: amount
+        description: The amount represents the monetary value associated with each
+          payment.
+      - name: order_id
+        description: A unique identifier for each payment order.
   - name: stg_signups
     config:
       tags: ["staging", "PII"]
     columns:
       - name: signup_id
+        description: A unique identifier for each signup in the training dataset.
       - name: customer_email
+        description: A unique identifier for the user associated with the signup.
+          It is used to track user information and signups.
+      - name: signup_date
+        description: The date and time when a user signed up for the service.
+      - name: hashed_password
+        description: A securely hashed version of the password provided by the user
+          during the sign-up process.
+      - name: customer_id
+        description: A unique identifier for each customer who has signed up.
