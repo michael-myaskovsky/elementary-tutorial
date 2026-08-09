@@ -82,4 +82,5 @@ final as (
 
 )
 
+-- Ensure correct final select statement
 select * from final
