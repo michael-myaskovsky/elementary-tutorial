@@ -6,12 +6,6 @@ with orders as (
 
 ),
 
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
-),
-
 order_payments as (
 
     select
@@ -23,7 +17,7 @@ order_payments as (
 
         sum(amount) as total_amount
 
-    from payments
+    from {{ ref('stg_payments') }}
 
     group by order_id
 
@@ -38,15 +32,12 @@ final as (
         orders.status,
 
         {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
+        coalesce(order_payments.{{ payment_method }}_amount, 0) as {{ payment_method }}_amount,
         {% endfor -%}
 
-        order_payments.total_amount as amount
+        coalesce(order_payments.total_amount, 0) as amount
 
     from orders
-
 
     left join order_payments
         on orders.order_id = order_payments.order_id
