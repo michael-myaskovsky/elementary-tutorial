@@ -1,56 +1,48 @@
-{% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
+{{
+  config(
+    materialized='incremental',
+    unique_key='order_id',
+    partition_by={
+      'field': 'order_date',
+      'data_type': 'date'
+    }
+  )
+}}
 
 with orders as (
-
     select * from {{ ref('stg_orders') }}
 
-),
-
-payments as (
-
-    select * from {{ ref('stg_payments') }}
+    {% if is_incremental() %}
+    where order_date > (select max(order_date) from {{ this }})
+    {% endif %}
 
 ),
 
 order_payments as (
-
-    select
-        order_id,
-
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
-
-        sum(amount) as total_amount
-
-    from payments
-
-    group by order_id
-
+    select * from {{ ref('stg_payments') }}
 ),
 
 final as (
-
     select
         orders.order_id,
         orders.customer_id,
         orders.order_date,
         orders.status,
 
-        {% for payment_method in payment_methods -%}
+        {% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
 
-        order_payments.{{ payment_method }}_amount,
+        {% for payment_method in payment_methods %}
+        coalesce(
+            sum(case when order_payments.payment_method = '{{ payment_method }}' then amount else 0 end),
+            0
+        ) as {{ payment_method }}_amount,
+        {% endfor %}
 
-        {% endfor -%}
-
-        order_payments.total_amount as amount
+        sum(order_payments.amount) as total_amount
 
     from orders
-
-
-    left join order_payments
-        on orders.order_id = order_payments.order_id
-
+    left join order_payments using (order_id)
+    group by 1, 2, 3, 4
 )
 
 select * from final
