@@ -12,8 +12,17 @@ models:
       tags: ["staging", "finance"]
     columns:
       - name: order_id
+        description: A unique identifier for each order in the training dataset.
       - name: status
 
+        description: A string representation of the current status of an order. It
+          indicates whether an order has been placed, is in progress, has been completed,
+          or has been canceled.
+      - name: customer_id
+        description: A unique identifier for a customer who has placed an order.
+      - name: order_date
+        description: A timestamp representing the date and time when the order was
+          placed.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
