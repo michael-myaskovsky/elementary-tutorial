@@ -5,16 +5,42 @@ models:
     description: This table has basic information about a customer, as well as some derived facts based on a customer's orders aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     config:
       tags: ["PII"]
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: |
+            CASE 
+              WHEN number_of_orders > 0 THEN customer_lifetime_value > 0
+              WHEN number_of_orders = 0 THEN customer_lifetime_value IS NULL OR customer_lifetime_value = 0
+              ELSE TRUE
+            END
+          config:
+            severity: error
+          name: validate_clv_order_consistency
 
     columns:
       - name: customer_id
         description: This is a unique identifier for a customer
+        tests:
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: error
 
       - name: first_name
         description: Customer's first name. PII.
+        tests:
+          - dbt_utils.not_empty_string:
+              config:
+                severity: error
 
       - name: last_name
         description: Customer's last name. PII.
+        tests:
+          - dbt_utils.not_empty_string:
+              config:
+                severity: error
 
       - name: first_order
         description: Date (UTC) of a customer's first order
