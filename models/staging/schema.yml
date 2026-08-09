@@ -8,6 +8,9 @@ models:
       - name: customer_id
 
   - name: stg_orders
+    description: Cleaned and standardized order data combining training and validation
+      datasets. This staging model provides the foundation for order analytics and
+      customer metrics.
     config:
       tags: ["staging", "finance"]
     columns:
