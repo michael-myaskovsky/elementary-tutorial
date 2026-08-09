@@ -7,23 +7,58 @@ models:
     columns:
       - name: customer_id
 
+        description: A unique identifier for customers. This ID is used to link customers
+          with other data points and track their information across various datasets.
+      - name: first_name
+        description: A personal identifier that represents the first name of a customer.
+          It is used to personalize interactions and communications with the customer.
+          This information is sourced from the 'first_name' column in the 'customers_training'
+          table, which contains a string representation of the customer's first name.
+      - name: last_name
+        description: A last name for a customer.
   - name: stg_orders
     config:
       tags: ["staging", "finance"]
     columns:
       - name: order_id
+        description: A unique identifier for each order in the system.
       - name: status
 
+        description: A status indicator for orders, reflecting the current state of
+          each order within the system.
+      - name: customer_id
+        description: A unique identifier for the customer placing an order.
+      - name: order_date
+        description: A timestamp representing the date and time when an order was
+          placed.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
     columns:
       - name: payment_id
+        description: A unique identifier for each payment made.
       - name: payment_method
 
+        description: A method by which a payment is made.
+      - name: amount
+        description: A numeric value representing the monetary amount associated with
+          a payment. It is a key factor in financial transactions and is used to calculate
+          totals, apply discounts, and perform other financial operations.
+      - name: order_id
+        description: A unique identifier for a payment transaction.
   - name: stg_signups
     config:
       tags: ["staging", "PII"]
     columns:
       - name: signup_id
+        description: A unique identifier for signups in the training dataset.
       - name: customer_email
+        description: A unique identifier for users who have signed up for the service.
+      - name: signup_date
+        description: A timestamp representing the date when a user signed up.
+      - name: hashed_password
+        description: A secure representation of the user's password, used to verify
+          their identity during the sign-up process.
+      - name: customer_id
+        description: A unique identifier for each customer who has signed up for the
+          service.
