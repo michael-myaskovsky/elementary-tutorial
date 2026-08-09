@@ -7,23 +7,57 @@ models:
     columns:
       - name: customer_id
 
+        description: A unique identifier for a customer in the customers_training
+          table.
+      - name: first_name
+        description: A unique identifier for customers that represents their first
+          name.
+      - name: last_name
+        description: A string value representing the family name of a customer.
   - name: stg_orders
     config:
       tags: ["staging", "finance"]
     columns:
       - name: order_id
+        description: A unique identifier for each order in the system.
       - name: status
 
+        description: A current state of the order. This is used to track the progress
+          of the order through the fulfillment process.
+      - name: customer_id
+        description: A unique identifier for the customer who placed the order.
+      - name: order_date
+        description: A timestamp representing the date and time when an order was
+          placed.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
     columns:
       - name: payment_id
+        description: A unique identifier for payments made through the system.
       - name: payment_method
 
+        description: A method of payment used for processing financial transactions.
+      - name: amount
+        description: The numeric value representing the amount of a payment. It is
+          used to track the financial transactions made by customers.
+      - name: order_id
+        description: A unique identifier for each payment transaction, used to link
+          the payment with the corresponding order.
   - name: stg_signups
     config:
       tags: ["staging", "PII"]
     columns:
       - name: signup_id
+        description: A unique identifier for each signup record.
       - name: customer_email
+        description: A unique identifier for a customer's email address used in the
+          signups training dataset.
+      - name: signup_date
+        description: The date and time when a user signs up for the service.
+      - name: hashed_password
+        description: A securely hashed version of the user's password used for authentication
+          purposes.
+      - name: customer_id
+        description: A unique identifier for customers who have signed up for the
+          service.
