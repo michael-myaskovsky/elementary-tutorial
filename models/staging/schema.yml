@@ -7,23 +7,54 @@ models:
     columns:
       - name: customer_id
 
+        description: A unique identifier assigned to each customer.
+      - name: first_name
+        description: A string representing the first name of a customer.
+      - name: last_name
+        description: A unique identifier for the last name of a customer.
   - name: stg_orders
     config:
       tags: ["staging", "finance"]
     columns:
       - name: order_id
+        description: A unique identifier for an order, used to track and reference
+          orders within the system.
       - name: status
 
+        description: A status indicator for orders, providing information on the current
+          state of each order within the system.
+      - name: customer_id
+        description: A unique identifier for the customer placing the order.
+      - name: order_date
+        description: A timestamp representing the date and time when an order was
+          placed.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
     columns:
       - name: payment_id
+        description: A unique identifier for payments processed within the system.
       - name: payment_method
 
+        description: A method of payment used for a transaction.
+      - name: amount
+        description: The monetary value associated with a payment transaction.
+      - name: order_id
+        description: A unique identifier for each payment order, used to link the
+          payment to the corresponding order.
   - name: stg_signups
     config:
       tags: ["staging", "PII"]
     columns:
       - name: signup_id
+        description: A unique identifier for each signup record.
       - name: customer_email
+        description: A unique identifier for the user who signed up for the service.
+      - name: signup_date
+        description: A timestamp representing the date and time when a user signs
+          up.
+      - name: hashed_password
+        description: A securely hashed representation of the user's password used
+          for authentication.
+      - name: customer_id
+        description: A unique identifier for each user in the signups_training table.
