@@ -7,6 +7,11 @@ models:
     columns:
       - name: customer_id
 
+        description: Unique identifier for each customer
+      - name: first_name
+        description: Customer's first name
+      - name: last_name
+        description: Customer's last name
   - name: stg_orders
     config:
       tags: ["staging", "finance"]
