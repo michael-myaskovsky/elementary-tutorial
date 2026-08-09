@@ -8,7 +8,7 @@ models:
 
     columns:
       - name: customer_id
-        description: This is a unique identifier for a customer
+        description: This is a unique identifier for a customer.
 
       - name: first_name
         description: Customer's first name. PII.
@@ -17,16 +17,16 @@ models:
         description: Customer's last name. PII.
 
       - name: first_order
-        description: Date (UTC) of a customer's first order
+        description: Date (UTC) of a customer's first order.
 
       - name: most_recent_order
-        description: Date (UTC) of a customer's most recent order
+        description: Date (UTC) of a customer's most recent order.
 
       - name: number_of_orders
-        description: Count of the number of orders a customer has placed
+        description: Count of the number of orders a customer has placed.
 
       - name: customer_lifetime_value
-        description: Total value (AUD) of a customer's orders
+        description: Total value (AUD) of a customer's orders.
 
       - name: customer_email
         description: Customer's email. PII.
