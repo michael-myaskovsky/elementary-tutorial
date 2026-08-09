@@ -2,13 +2,20 @@
 
 with orders as (
 
-    select * from {{ ref('stg_orders') }}
+    select 
+        order_id,
+        customer_id,
+        order_date,
+        status
+    from {{ ref('stg_orders') }}
+    where order_date >= dateadd(month, -3, current_date)  -- Example: Filter for last 3 months
 
 ),
 
 payments as (
 
     select * from {{ ref('stg_payments') }}
+    where order_id in (select order_id from orders)  -- Filter payments based on filtered orders
 
 ),
 
