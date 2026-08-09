@@ -2,28 +2,61 @@ version: 2
 
 models:
   - name: stg_customers
+    description: Staging model for customer data. Renames ID field and selects core customer attributes from either validation or training datasets based on configuration.
+    owner: michael@elementary-data.com
     config:
       tags: ["staging", "PII"]
     columns:
       - name: customer_id
+        description: Unique identifier for each customer, renamed from source 'id' field
+      - name: first_name
+        description: Customer's first name
+      - name: last_name
+        description: Customer's last name
 
   - name: stg_orders
+    description: Staging model for order data. Standardizes field names and selects core order attributes from either validation or training datasets based on configuration.
+    owner: michael@elementary-data.com
     config:
       tags: ["staging", "finance"]
     columns:
       - name: order_id
+        description: Unique identifier for each order, renamed from source 'id' field
+      - name: customer_id
+        description: Foreign key reference to the customer who placed the order, renamed from source 'user_id' field
+      - name: order_date
+        description: Date when the order was placed
       - name: status
+        description: Current status of the order (e.g., pending, completed, cancelled)
 
   - name: stg_payments
+    description: Staging model for payment data. Converts amounts from cents to dollars and standardizes field names from either validation or training datasets based on configuration.
+    owner: michael@elementary-data.com
     config:
       tags: ["staging", "finance"]
     columns:
       - name: payment_id
+        description: Unique identifier for each payment transaction, renamed from source 'id' field
+      - name: order_id
+        description: Foreign key reference to the associated order
       - name: payment_method
+        description: Method used for payment (e.g., credit_card, bank_transfer, paypal)
+      - name: amount
+        description: Payment amount in dollars, converted from cents in the source data
 
   - name: stg_signups
+    description: Staging model for user signup data. Standardizes field names and selects signup-related attributes from either validation or training datasets based on configuration.
+    owner: michael@elementary-data.com
     config:
       tags: ["staging", "PII"]
     columns:
       - name: signup_id
+        description: Unique identifier for each signup event, renamed from source 'id' field
+      - name: customer_id
+        description: Foreign key reference to the customer, renamed from source 'user_id' field
       - name: customer_email
+        description: Customer's email address used for signup, renamed from source 'user_email' field
+      - name: hashed_password
+        description: Encrypted/hashed version of the customer's password for security
+      - name: signup_date
+        description: Date when the customer signed up
