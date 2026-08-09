@@ -7,13 +7,24 @@ models:
     columns:
       - name: customer_id
 
+        description: A unique identifier assigned to each customer in the system.
+      - name: first_name
+        description: A unique identifier for a customer's first name, sourced from
+          the customers_training table.
+      - name: last_name
+        description: A unique identifier...
   - name: stg_orders
     config:
       tags: ["staging", "finance"]
     columns:
       - name: order_id
+        description: A unique identifier for orders.
       - name: status
 
+        description: A status indicator for orders, used to track the current state
+          of each order within the system.
+      - name: customer_id
+        description: A unique identifier for the customer associated with the order.
   - name: stg_payments
     config:
       tags: ["staging", "finance"]
@@ -21,9 +32,18 @@ models:
       - name: payment_id
       - name: payment_method
 
+        description: A method used to make a payment.
   - name: stg_signups
     config:
       tags: ["staging", "PII"]
     columns:
       - name: signup_id
+        description: A unique identifier for signups, derived from the 'id' column
+          in the 'signups_training' table.
       - name: customer_email
+        description: A unique identifier for the user who has signed up.
+      - name: hashed_password
+        description: A hashed version of the password associated with a user's signup.
+      - name: customer_id
+        description: A unique identifier for a customer who has signed up for a service
+          or program.
