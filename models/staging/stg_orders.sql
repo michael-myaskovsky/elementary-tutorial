@@ -2,12 +2,12 @@
 
 {% if elementary.get_config_var('anomalies') %}
     with source as (
-        select * from {{ ref('orders_validation') }}
+        select id, user_id, order_date, status from {{ ref('orders_validation') }}
     ),
 
 {% else %}
     with source as (
-        select * from {{ ref('orders_training') }}
+        select id, user_id, order_date, status from {{ ref('orders_training') }}
     ),
 {% endif %}
 
