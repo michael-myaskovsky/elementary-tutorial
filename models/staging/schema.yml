@@ -6,6 +6,11 @@ models:
       tags: ["staging", "PII"]
     columns:
       - name: customer_id
+        description: "Unique identifier for each customer"
+      - name: first_name
+        description: "Customer's first name (PII)"
+      - name: last_name
+        description: "Customer's last name (PII)"
 
   - name: stg_orders
     config:
