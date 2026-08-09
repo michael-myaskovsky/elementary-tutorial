@@ -3,7 +3,7 @@ version: 2
 models:
   - name: stg_customers
     config:
-      tags: ["staging", "PII"]
+      tags: ["staging", "PII", test]
     columns:
       - name: customer_id
 
