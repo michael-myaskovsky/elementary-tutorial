@@ -2,7 +2,12 @@
 
 with orders as (
 
-    select * from {{ ref('stg_orders') }}
+    select
+        order_id,
+        customer_id,
+        order_date,
+        status
+    from {{ ref('stg_orders') }}
 
 ),
 
@@ -47,10 +52,17 @@ final as (
 
     from orders
 
-
+    -- Using LEFT JOIN to keep all orders, even those without payments
     left join order_payments
         on orders.order_id = order_payments.order_id
 
 )
 
 select * from final
+
+/*
+Optimization suggestions:
+1. Consider materializing this model as a table if it's frequently queried.
+2. If supported by your data warehouse, consider partitioning by order_date
+   and clustering by customer_id or order_id for improved query performance.
+*/
