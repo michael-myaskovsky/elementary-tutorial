@@ -1,56 +1,14 @@
-{% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
+-- Consider materializing this model as a table if queried frequently
+-- Ensure 'order_id' is indexed in both stg_orders and stg_payments
+-- Consider partitioning by 'order_date' if it's frequently used in filters or joins
 
-with orders as (
-
-    select * from {{ ref('stg_orders') }}
-
-),
-
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
-),
-
-order_payments as (
-
-    select
-        order_id,
-
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
-
-        sum(amount) as total_amount
-
-    from payments
-
-    group by order_id
-
-),
-
-final as (
-
-    select
-        orders.order_id,
-        orders.customer_id,
-        orders.order_date,
-        orders.status,
-
-        {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
-        {% endfor -%}
-
-        order_payments.total_amount as amount
-
-    from orders
-
-
-    left join order_payments
-        on orders.order_id = order_payments.order_id
-
-)
-
-select * from final
+SELECT
+    stg_orders.order_id,
+    stg_orders.customer_id,
+    stg_orders.order_date,
+    stg_orders.status,
+    SUM(stg_payments.amount) as amount
+FROM {{ ref('stg_orders') }} AS stg_orders
+LEFT JOIN {{ ref('stg_payments') }} AS stg_payments
+    ON stg_orders.order_id = stg_payments.order_id
+GROUP BY 1, 2, 3, 4
