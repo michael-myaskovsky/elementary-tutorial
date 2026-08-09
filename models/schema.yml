@@ -68,7 +68,7 @@ models:
         description: Amount of the order (AUD) paid for by gift card
 
   - name: returned_orders
-    description: This table contains all of the returned orders
+    description: This table contains all of the returned orders.
     config:
       tags: ["finance"]
 
