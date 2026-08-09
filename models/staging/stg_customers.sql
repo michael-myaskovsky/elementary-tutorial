@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 -- depends_on: {{ ref('customers_validation') }}
 
 {% if elementary.get_config_var('anomalies') %}
