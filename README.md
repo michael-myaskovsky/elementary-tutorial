@@ -1,30 +1,68 @@
-<p align="center">
-<img alt="Logo" src="static/header_git.png"/ width="1000">
-</p>
+# Elementary Tutorial
 
-<h2 align="center">
-Data observability for analytics & data engineers
-</h2>
-<h4 align="center">
-Monitor your data quality, operation and performance directly from your dbt project.
-</h4>
+Welcome to the Elementary tutorial! This project demonstrates how to use Elementary for data observability with dbt.
 
-<p align="center">
-<a href="https://join.slack.com/t/elementary-community/shared_invite/zt-uehfrq2f-zXeVTtXrjYRbdE_V6xq4Rg"><img src="https://img.shields.io/badge/join-Slack-ff69b4"/></a>
-<a href="https://docs.elementary-data.com/quickstart"><img src="https://img.shields.io/badge/docs-quickstart-orange"/></a>
-<img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-ff69b4"/>
-<img alt="Downloads" src="https://static.pepy.tech/personalized-badge/elementary-lineage?period=total&units=international_system&left_color=grey&right_color=orange"&left_text=Downloads"/>
+<!-- Test comment for PR functionality -->
 
-<div align="center">
+## Getting Started
 
-[Repo »](https://github.com/elementary-data/elementary/) | [Demo »](https://bit.ly/3IAp9wf) | [Docs »](https://docs.elementary-data.com/) | [Slack »](https://join.slack.com/t/elementary-community/shared_invite/zt-uehfrq2f-zXeVTtXrjYRbdE_V6xq4Rg)
+This tutorial will walk you through:
 
-</div>
+1. Setting up Elementary in your dbt project
+2. Adding data quality tests
+3. Viewing results in the Elementary UI
+4. Setting up alerts and monitoring
 
-## Elementary Tutorial
+## Prerequisites
 
-This repository is part of the Elementary Tutorial.
+- Python 3.7+
+- dbt Core or dbt Cloud
+- A supported data warehouse (Snowflake, BigQuery, Redshift, etc.)
 
-The tutorial walks you through Elementary’s testing features, reporting and the `EDR` tool.
+## Installation
 
-To access the tutorial guide please click [here](https://docs.elementary-data.com/tutorial/tutorial-start).
+1. Install Elementary:
+```bash
+pip install elementary-data
+```
+
+2. Add Elementary to your `packages.yml`:
+```yaml
+packages:
+  - package: elementary-data/elementary
+    version: 0.15.1
+```
+
+3. Run `dbt deps` to install the package
+
+4. Add Elementary models to your `dbt_project.yml`:
+```yaml
+models:
+  elementary:
+    +materialized: view
+    +schema: elementary
+```
+
+## Usage
+
+1. Run your dbt models with Elementary tests:
+```bash
+dbt run
+dbt test
+```
+
+2. Generate the Elementary report:
+```bash
+edr report
+```
+
+3. Send results to Elementary Cloud (optional):
+```bash
+edr send-report
+```
+
+## Learn More
+
+- [Elementary Documentation](https://docs.elementary-data.com/)
+- [Elementary GitHub](https://github.com/elementary-data/elementary)
+- [Elementary Community Slack](https://join.slack.com/t/elementary-community/shared_invite/zt-uehfrq2f-zXeVTtXrjYRbdE_V6xq4Rg)
