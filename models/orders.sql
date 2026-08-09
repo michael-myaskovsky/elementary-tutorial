@@ -1,56 +1,13 @@
-{% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
+-- Consider adding an index on order_id and partitioning by order_date for better performance
+{{ config(materialized='table') }}
 
-with orders as (
-
-    select * from {{ ref('stg_orders') }}
-
-),
-
-payments as (
-
-    select * from {{ ref('stg_payments') }}
-
-),
-
-order_payments as (
-
-    select
-        order_id,
-
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
-
-        sum(amount) as total_amount
-
-    from payments
-
-    group by order_id
-
-),
-
-final as (
-
-    select
-        orders.order_id,
-        orders.customer_id,
-        orders.order_date,
-        orders.status,
-
-        {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
-        {% endfor -%}
-
-        order_payments.total_amount as amount
-
-    from orders
-
-
-    left join order_payments
-        on orders.order_id = order_payments.order_id
-
-)
-
-select * from final
+select
+    o.order_id,
+    o.order_date,
+    o.customer_id,
+    o.status,
+    c.first_name,
+    c.last_name,
+    c.email
+from {{ ref('stg_orders') }} o
+left join {{ ref('stg_customers') }} c on o.customer_id = c.customer_id
