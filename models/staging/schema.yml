@@ -2,12 +2,16 @@ version: 2
 
 models:
   - name: stg_customers
+    description: A staging table containing customer data intended for training and
+      validation models.
     config:
       tags: ["staging", "PII"]
     columns:
       - name: customer_id
 
   - name: stg_orders
+    description: This entity represents a staging area for order data, capturing validated
+      and trained information for further processing.
     config:
       tags: ["staging", "finance"]
     columns:
@@ -15,6 +19,10 @@ models:
       - name: status
 
   - name: stg_payments
+    description: A staging table containing all the payment transactions that are
+      being processed and stored before they are finalized. It serves as an intermediate
+      step in the payment processing workflow, allowing for quality checks and validations
+      before the data is moved to production.
     config:
       tags: ["staging", "finance"]
     columns:
@@ -22,6 +30,9 @@ models:
       - name: payment_method
 
   - name: stg_signups
+    description: This table asset contains data related to user sign-ups, including
+      personal information that identifies users. It is used for staging and validation
+      purposes.
     config:
       tags: ["staging", "PII"]
     columns:
