@@ -1,3 +1,10 @@
+{#
+    Orders Model
+    
+    This model combines order information with payment details,
+    aggregating payment amounts by method for each order.
+#}
+
 {% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
 
 with orders as (
@@ -47,7 +54,7 @@ final as (
 
     from orders
 
-
+    -- Left join to handle orders that may not have payment records yet
     left join order_payments
         on orders.order_id = order_payments.order_id
 
